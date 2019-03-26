@@ -16,7 +16,6 @@ void ATankPlayerController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Player controller %s possesing: %s"), *Super::GetName(), *ControlledTank->GetName() );
 	}
-
 }
 
 ATank* ATankPlayerController::GetControlledTank() const
