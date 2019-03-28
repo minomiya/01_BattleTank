@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+
 #include "TankPlayerController.h"
+#include "Public/Tank.h"
 #include "BattleTank.h"
 
 
@@ -54,8 +56,10 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)
 	FVector LookDirection;
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
-		if(GetLookVectorHitLocation(LookDirection, HitLocation))
+		if (GetLookVectorHitLocation(LookDirection, HitLocation))
+		{
 			//UE_LOG(LogTemp, Warning, TEXT("OutHit: %s"), *HitLocation.ToString());
+		}
 	}
 
 	return true;
