@@ -33,6 +33,5 @@ public:
 
 	void MoveBarrelTowards(FVector AimDirection);
 
-private:
 	UTankBarrel* Barrel = nullptr;
 };
