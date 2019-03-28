@@ -35,10 +35,50 @@ void UTankAimmingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSe
 	Barrel = BarrelToSet;
 }
 
-void UTankAimmingComponent::AimAt(FVector HitLocation)
+void UTankAimmingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
-	auto TankName = GetOwner()->GetName();
-	auto BarrelLocation = Barrel->GetComponentLocation().ToString();
-	UE_LOG(LogTemp, Warning, TEXT("%s aimming at %s from %s"), *TankName, *HitLocation.ToString(), *BarrelLocation);
+	if (!Barrel) { return; }
+
+	FVector OutLaunchVelocity;
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+	FCollisionQueryParams TraceParameters = FCollisionQueryParams(FName(TEXT("")), false, Barrel);
+	
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(GetOwner());
+
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
+		(
+			this,
+			OutLaunchVelocity,
+			StartLocation,
+			HitLocation,
+			LaunchSpeed,
+			false,
+			0,
+			0,
+			ESuggestProjVelocityTraceOption::TraceFullPath,
+			FCollisionResponseParams(),
+			ActorsToIgnore,
+			true
+		);
+	
+
+	if (bHaveAimSolution)
+	{
+		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+
+		MoveBarrelTowards(AimDirection);
+		UE_LOG(LogTemp, Warning, TEXT("OutLaunchVelocity %s, AimDirection %s"), *OutLaunchVelocity.ToString(), *AimDirection.ToString());
+	}
 }
+
+void UTankAimmingComponent::MoveBarrelTowards(FVector AimDirection)
+{
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
+
+	UE_LOG(LogTemp, Warning, TEXT("AimAsRotator %s"), *AimAsRotator.ToString());
+}
+
 

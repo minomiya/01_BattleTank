@@ -55,7 +55,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
 		if(GetLookVectorHitLocation(LookDirection, HitLocation))
-			UE_LOG(LogTemp, Warning, TEXT("OutHit: %s"), *HitLocation.ToString());
+			//UE_LOG(LogTemp, Warning, TEXT("OutHit: %s"), *HitLocation.ToString());
 	}
 
 	return true;
