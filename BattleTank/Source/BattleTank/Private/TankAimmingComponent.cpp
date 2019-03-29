@@ -37,6 +37,11 @@ void UTankAimmingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
 	Barrel = BarrelToSet;
 }
 
+//void UTankAimmingComponent::SetTurretReference(UTankTurret * TurretToSet)
+//{
+//	Turret = TurretToSet;
+//}
+
 void UTankAimmingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
 	if (!Barrel) { return; }
@@ -51,7 +56,11 @@ void UTankAimmingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 			OutLaunchVelocity,
 			StartLocation,
 			HitLocation,
-			LaunchSpeed
+			LaunchSpeed,
+			false,
+			0,
+			0,
+			ESuggestProjVelocityTraceOption::DoNotTrace
 		);
 	
 
@@ -61,6 +70,7 @@ void UTankAimmingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
+		MoveTurretTowards(AimDirection);
 		UE_LOG(LogTemp, Warning, TEXT("%f Aim Solution found"), Time);
 	}
 	else
@@ -75,7 +85,16 @@ void UTankAimmingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-	Barrel->Elevate(1); // TODO remove magic number
+	Barrel->Elevate(DeltaRotator.Pitch); // TODO remove magic number
+}
+
+void UTankAimmingComponent::MoveTurretTowards(FVector AimDirection)
+{
+	//auto TurretRotator = Turret->GetForwardVector().Rotation();
+	//auto AimAsRotator = AimDirection.Rotation();
+	//auto DeltaRotator = AimAsRotator - TurretRotator;
+
+	//Turret->Rotate(DeltaRotator.Yam); 
 }
 
 
