@@ -27,5 +27,4 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = Setup)
 	float MinElevationInDegrees = 0; // Sensible default
-
 };
