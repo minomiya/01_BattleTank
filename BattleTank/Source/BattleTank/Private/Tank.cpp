@@ -2,6 +2,10 @@
 
 
 #include "BattleTank/Public/Tank.h"
+
+#include "BattleTank/Public/Projectile.h"
+#include "BattleTank/Public/TankBarrel.h"
+#include "Runtime/Engine/Classes/Engine/StaticMeshSocket.h"
 #include "BattleTank.h"
 #include "TankAimmingComponent.h"
 
@@ -23,6 +27,7 @@ void ATank::AimAt(FVector HitLocation)
 
 void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
 {
+	Barrel = BarrelToSet;
 	TankAimmingComponent->SetBarrelReference(BarrelToSet);
 }
 
@@ -33,7 +38,12 @@ void ATank::SetTurretReference(UTankTurret * TurretToSet)
 
 void ATank::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Tank Fire!"));
+	if (!Barrel || !ProjectileBP) { return; }
+
+	FVector Location = Barrel->GetSocketLocation(FName("Projectile"));
+	UE_LOG(LogTemp, Warning, TEXT("Tank Fire! %s"), *Location.ToString());
+
+	GetWorld()->SpawnActor<AProjectile>(ProjectileBP, Location, FRotator::ZeroRotator);
 }
 
 // Called when the game starts or when spawned
