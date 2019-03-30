@@ -2,7 +2,6 @@
 
 
 #include "BattleTank/Public/Tank.h"
-
 #include "BattleTank/Public/Projectile.h"
 #include "BattleTank/Public/TankBarrel.h"
 #include "Runtime/Engine/Classes/Engine/StaticMeshSocket.h"
@@ -41,9 +40,11 @@ void ATank::Fire()
 	if (!Barrel || !ProjectileBP) { return; }
 
 	FVector Location = Barrel->GetSocketLocation(FName("Projectile"));
-	UE_LOG(LogTemp, Warning, TEXT("Tank Fire! %s"), *Location.ToString());
+	FRotator Rotation = Barrel->GetSocketRotation(FName("Projectile"));
 
-	GetWorld()->SpawnActor<AProjectile>(ProjectileBP, Location, FRotator::ZeroRotator);
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBP, Location, Rotation);
+
+	Projectile->LaunchProjectile(LaunchSpeed);
 }
 
 // Called when the game starts or when spawned
