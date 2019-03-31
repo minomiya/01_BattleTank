@@ -18,6 +18,6 @@ public:
 	// -1 is max downward speed and +1 is max up movement
 	void Rotate(float RelativeSpeed);
 
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	float MaxDegreesPerSecond = 25; // Sensible default
 };
