@@ -13,9 +13,14 @@ void UTankNavMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrac
 
 void UTankNavMovementComponent::IntendMoveForward(float Throw)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Intend move forward throw: %f"), Throw);
-
+	if (!LeftTrack || !LeftTrack) { return; }
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
+}
 
+void UTankNavMovementComponent::IntendTurnRight(float Throw)
+{
+	if (!LeftTrack || !LeftTrack) { return; }
+	LeftTrack->SetThrottle(Throw);
+	RightTrack->SetThrottle(-Throw);
 }
