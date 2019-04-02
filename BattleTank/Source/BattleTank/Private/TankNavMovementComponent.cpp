@@ -24,3 +24,8 @@ void UTankNavMovementComponent::IntendTurnRight(float Throw)
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
 }
+
+void UTankNavMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)
+{
+	UE_LOG(LogTemp, Warning, TEXT("RequestDirectMove from %s velocity %s"), *GetOwner()->GetName(), *MoveVelocity.ToString())
+}
