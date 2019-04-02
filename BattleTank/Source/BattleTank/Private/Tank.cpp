@@ -7,6 +7,7 @@
 #include "Runtime/Engine/Classes/Engine/StaticMeshSocket.h"
 #include "BattleTank.h"
 #include "TankAimmingComponent.h"
+#include "TankNavMovementComponent.h"
 
 
 
@@ -17,6 +18,7 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 
 	TankAimmingComponent = CreateDefaultSubobject<UTankAimmingComponent>(FName("Aimming Component"));
+	TankNavMovementComponent = CreateDefaultSubobject<UTankNavMovementComponent>(FName("Movement Component"));
 }
 
 void ATank::AimAt(FVector HitLocation)

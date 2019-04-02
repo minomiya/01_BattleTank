@@ -9,9 +9,13 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankNavMovementComponent : public UNavMovementComponent
 {
 	GENERATED_BODY()
-	
+
+public:
+	UFUNCTION(BlueprintCallable, Category = TankInputs)
+	void IntendMoveForward(float Throw);
+
 };
