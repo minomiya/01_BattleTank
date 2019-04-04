@@ -22,6 +22,7 @@ public:
 	
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable, Category = "Steup")
 	ATank* GetControlledTank() const;
 
 	void AimTowardsCrosshair();
