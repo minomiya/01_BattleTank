@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyrights LateGameStudios Ltd.
 
 #include "BattleTank/Public/TankAimmingComponent.h"
 #include "BattleTank/Public/TankBarrel.h"
@@ -33,14 +33,10 @@ UTankAimmingComponent::UTankAimmingComponent()
 	// ...
 }
 
-void UTankAimmingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
-{
-	Barrel = BarrelToSet;
-}
-
-void UTankAimmingComponent::SetTurretReference(UTankTurret * TurretToSet)
+void UTankAimmingComponent::Initialise(UTankTurret * TurretToSet, UTankBarrel * BarrelToSet)
 {
 	Turret = TurretToSet;
+	Barrel = BarrelToSet;
 }
 
 void UTankAimmingComponent::AimAt(FVector HitLocation, float LaunchSpeed)

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyrights LateGameStudios Ltd.
 
 #pragma once
 
@@ -8,8 +8,6 @@
 #include "Tank.generated.h"
 
 // Foward declarations
-class UTankBarrel;
-class UTankTurret;
 class AProjectile;
 class UTankAimmingComponent;
 class UTankNavMovementComponent;
@@ -22,12 +20,6 @@ class BATTLETANK_API ATank : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ATank();
-
-	UFUNCTION(BlueprintCallable, Category = TankInputs)
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-
-	UFUNCTION(BlueprintCallable, Category = TankInputs)
-	void SetTurretReference(UTankTurret* TurretToSet);
 
 	void AimAt(FVector HitLocation);
 
@@ -45,17 +37,11 @@ protected:
 	UTankNavMovementComponent* TankNavMovementComponent = nullptr;
 
 public:
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 5000;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	TSubclassOf<AProjectile> ProjectileBP = nullptr;
-
-	// Local reference
-	UTankBarrel* Barrel = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ReloadTimeInSeconds = 3;

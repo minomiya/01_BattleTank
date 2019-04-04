@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Copyrights LateGameStudios Ltd.
 #pragma once
 
 #include "CoreMinimal.h"
@@ -28,9 +27,8 @@ public:
 	// Sets default values for this component's properties
 	UTankAimmingComponent();
 
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-
-	void SetTurretReference(UTankTurret* TurretToSet);
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Initialise(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet);
 
 protected:
 	// Called when the game starts
@@ -42,14 +40,16 @@ public:
 
 	void AimAt(FVector HitLocation, float LaunchSpeed);
 
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void MoveBarrelTowards(FVector AimDirection);
 
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void MoveTurretTowards(FVector AimDirection);
+
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 
 	UTankBarrel* Barrel = nullptr;
 
 	UTankTurret* Turret = nullptr;
-
-	UPROPERTY(BlueprintReadOnly, Category = "State")
-	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 };
