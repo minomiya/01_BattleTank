@@ -6,7 +6,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Called when the game starts
-void UTankAimmingComponent::BeginPlay()
+void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -16,7 +16,7 @@ void UTankAimmingComponent::BeginPlay()
 
 
 // Called every frame
-void UTankAimmingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
@@ -24,7 +24,7 @@ void UTankAimmingComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 }
 
 // Sets default values for this component's properties
-UTankAimmingComponent::UTankAimmingComponent()
+UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -33,15 +33,17 @@ UTankAimmingComponent::UTankAimmingComponent()
 	// ...
 }
 
-void UTankAimmingComponent::Initialise(UTankTurret * TurretToSet, UTankBarrel * BarrelToSet)
+void UTankAimingComponent::Initialise(UTankTurret * TurretToSet, UTankBarrel * BarrelToSet)
 {
+	if ( ensure(!BarrelToSet || !TurretToSet) ) { return; }
+
 	Turret = TurretToSet;
 	Barrel = BarrelToSet;
 }
 
-void UTankAimmingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
+void UTankAimingComponent::AimAt(FVector HitLocation)
 {
-	if (!Barrel) { return; }
+	if (ensure(!Barrel)) { return; }
 
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -66,8 +68,7 @@ void UTankAimmingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	if (bHaveAimSolution)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		MoveBarrelTowards(AimDirection);
-		MoveTurretTowards(AimDirection);
+		MoveTurretBarrelTowards(AimDirection);
 		//UE_LOG(LogTemp, Warning, TEXT("%f Aim Solution found"), Time);
 	}
 	else
@@ -76,22 +77,16 @@ void UTankAimmingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	}
 }
 
-void UTankAimmingComponent::MoveBarrelTowards(FVector AimDirection)
+void UTankAimingComponent::MoveTurretBarrelTowards(FVector AimDirection)
 {
+	if (ensure(!Turret || !Barrel)) { return; }
+
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-	Barrel->Elevate(DeltaRotator.Pitch);
-}
-
-void UTankAimmingComponent::MoveTurretTowards(FVector AimDirection)
-{
-	auto TurretRotator = Turret->GetForwardVector().Rotation();
-	auto AimAsRotator = AimDirection.Rotation();
-	auto DeltaRotator = AimAsRotator - TurretRotator;
-
 	Turret->Rotate(DeltaRotator.Yaw);
+	Barrel->Elevate(DeltaRotator.Pitch);
 }
 
 

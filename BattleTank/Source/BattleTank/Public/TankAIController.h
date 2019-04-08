@@ -9,6 +9,7 @@
 
 // Foward declaration
 class ATank;
+class UTankAimingComponent;
 
 /**
  * 
@@ -19,8 +20,12 @@ class BATTLETANK_API ATankAIController : public AAIController
 	GENERATED_BODY()
 
 public:
+	virtual void BeginPlay() override;
+
 	virtual void Tick(float DeltaTime) override;
 
 	// Hoe close the IA Tank get
 	float AcceptanceRadius = 3000;
+
+	UTankAimingComponent* TankAimmingComponent = nullptr;
 };

@@ -6,14 +6,12 @@
 #include "Runtime/Engine/Classes/Engine/StaticMeshSocket.h"
 #include "BattleTank.h"
 #include "BattleTank/Public/TankBarrel.h"
-#include "TankAimmingComponent.h"
 
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	TankAimmingComponent = FindComponentByClass<UTankAimmingComponent>();
 
 }
 
@@ -24,26 +22,22 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ATank::AimAt(FVector HitLocation)
-{
-	if (ensure(!TankAimmingComponent)) { return; }
-	TankAimmingComponent->AimAt(HitLocation, LaunchSpeed);
-}
 
 void ATank::Fire()
 {
-	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	//if (ensure(!Barrel)) { return; }
+	//bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 
-	if (bIsReloaded && TankAimmingComponent && ProjectileBP)
-	{
+	//if (bIsReloaded) // TODO refactor the fire function
+	//{
+	//	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+	//		ProjectileBP, 
+	//		Barrel->GetSocketLocation(FName("Projectile")),
+	//		Barrel->GetSocketRotation(FName("Projectile"))
+	//		);
 
-		FVector Location = TankAimmingComponent->Barrel->GetSocketLocation(FName("Projectile"));
-		FRotator Rotation = TankAimmingComponent->Barrel->GetSocketRotation(FName("Projectile"));
-
-		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBP, Location, Rotation);
-
-		Projectile->LaunchProjectile(LaunchSpeed);	
-		LastFireTime = FPlatformTime::Seconds();
-	}
+	//	Projectile->LaunchProjectile(LaunchSpeed);	
+	//	LastFireTime = FPlatformTime::Seconds();
+	//}
 }
 

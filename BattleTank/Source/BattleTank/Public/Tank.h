@@ -9,8 +9,6 @@
 
 // Foward declarations
 class AProjectile;
-class UTankAimmingComponent;
-class UTankNavMovementComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -21,21 +19,13 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-	void AimAt(FVector HitLocation);
-
 	UFUNCTION(BlueprintCallable, Category = TankInputs)
 	void Fire();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimmingComponent* TankAimmingComponent = nullptr;
-
-	UPROPERTY(BlueprintReadOnly)
-	UTankNavMovementComponent* TankNavMovementComponent = nullptr;
-
+	
 public:
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 5000;

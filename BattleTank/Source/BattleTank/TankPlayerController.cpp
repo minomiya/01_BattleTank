@@ -2,14 +2,17 @@
 
 
 #include "TankPlayerController.h"
-#include "Public/Tank.h"
 #include "BattleTank.h"
+#include "TankAimmingComponent.h"
 
 
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TankAimmingComponent = GetPawn()->FindComponentByClass< UTankAimingComponent>();
+	if (ensure(!TankAimmingComponent)){return; }
 }
 
 // Called every frame
@@ -19,19 +22,14 @@ void ATankPlayerController::Tick(float DeltaTime)
 	AimTowardsCrosshair();
 }
 
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank()){ return; }
+	if (!TankAimmingComponent){ return; }
 
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		GetControlledTank()->AimAt(HitLocation);
+		TankAimmingComponent->AimAt(HitLocation);
 	}
 
 }
@@ -61,7 +59,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 	auto StartLocation = PlayerCameraManager->GetCameraLocation();
 	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
 
-	FCollisionQueryParams TraceParameters = FCollisionQueryParams(FName(TEXT("")), false, GetControlledTank());
+	FCollisionQueryParams TraceParameters = FCollisionQueryParams(FName(TEXT("")), false, TankAimmingComponent->Barrel);
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, TraceParameters))
 	{
 		HitLocation = HitResult.Location;
