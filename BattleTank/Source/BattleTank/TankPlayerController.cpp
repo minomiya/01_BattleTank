@@ -3,6 +3,7 @@
 
 #include "TankPlayerController.h"
 #include "BattleTank.h"
+#include "Runtime/Engine/Public/CollisionQueryParams.h"
 #include "TankAimmingComponent.h"
 
 
@@ -56,7 +57,6 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 	FHitResult HitResult;
 	auto StartLocation = PlayerCameraManager->GetCameraLocation();
 	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
-
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility))
 	{
 		HitLocation = HitResult.Location;
