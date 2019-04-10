@@ -3,6 +3,7 @@
 #include "BattleTank/Public/TankAimmingComponent.h"
 #include "BattleTank/Public/TankBarrel.h"
 #include "BattleTank/Public/TankTurret.h"
+#include "../Public/Projectile.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Called when the game starts
@@ -35,7 +36,7 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::Initialise(UTankTurret * TurretToSet, UTankBarrel * BarrelToSet)
 {
-	if ( ensure(!BarrelToSet || !TurretToSet) ) { return; }
+	if ( !ensure(BarrelToSet && TurretToSet) ) { return; }
 
 	Turret = TurretToSet;
 	Barrel = BarrelToSet;
@@ -43,11 +44,10 @@ void UTankAimingComponent::Initialise(UTankTurret * TurretToSet, UTankBarrel * B
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
 {
-	if (ensure(!Barrel)) { return; }
+	if (!ensure(Barrel)) { return; }
 
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
-	FCollisionQueryParams TraceParameters = FCollisionQueryParams(FName(TEXT("")), false, Barrel);
 
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
 		(
@@ -62,24 +62,18 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 			ESuggestProjVelocityTraceOption::DoNotTrace
 		);
 	
-
 	auto Time = GetWorld()->GetTimeSeconds();
 
 	if (bHaveAimSolution)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveTurretBarrelTowards(AimDirection);
-		//UE_LOG(LogTemp, Warning, TEXT("%f Aim Solution found"), Time);
-	}
-	else
-	{
-		//UE_LOG(LogTemp, Warning, TEXT("%f Aim Solution not found"), Time);
 	}
 }
 
 void UTankAimingComponent::MoveTurretBarrelTowards(FVector AimDirection)
 {
-	if (ensure(!Turret || !Barrel)) { return; }
+	if (!ensure(Turret && Barrel)) { return; }
 
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
@@ -90,3 +84,21 @@ void UTankAimingComponent::MoveTurretBarrelTowards(FVector AimDirection)
 }
 
 
+void UTankAimingComponent::Fire()
+{
+	if (!ensure(Barrel && ProjectileBP)) { return; }
+
+	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+
+	if (bIsReloaded)
+	{
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBP, 
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+
+		Projectile->LaunchProjectile(LaunchSpeed);	
+		LastFireTime = FPlatformTime::Seconds();
+	}
+}

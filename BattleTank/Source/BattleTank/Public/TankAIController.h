@@ -26,6 +26,4 @@ public:
 
 	// Hoe close the IA Tank get
 	float AcceptanceRadius = 3000;
-
-	UTankAimingComponent* TankAimmingComponent = nullptr;
 };

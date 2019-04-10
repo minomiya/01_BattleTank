@@ -8,8 +8,6 @@
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	TankAimmingComponent = GetPawn()->FindComponentByClass< UTankAimingComponent>();
 }
 
 // Called every frame
@@ -28,10 +26,10 @@ void ATankAIController::Tick(float DeltaTime)
 	MoveToActor(PlayerTank, AcceptanceRadius);
 
 	// Aim towards the player
-	if (ensure(!TankAimmingComponent)) { return; }
+	auto TankAimmingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(TankAimmingComponent)) { return; }
 	TankAimmingComponent->AimAt(PlayerTank->GetActorLocation());
 
-	// TODO fix the fire()
-	//ControlledPlayer->Fire(); 
+	TankAimmingComponent->Fire();
 }
 
