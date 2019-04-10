@@ -44,6 +44,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = TankInputs)
 	void Fire();
 
+	bool isBarrelMoving();
+
 
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringStatus FiringStatus = EFiringStatus::Reloading;
@@ -63,4 +65,5 @@ public:
 
 	double LastFireTime = 0;
 
+	FVector AimDirection;
 };
