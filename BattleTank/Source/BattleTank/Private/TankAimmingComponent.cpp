@@ -21,7 +21,11 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+	if (TankAmmo <= 0)
+	{
+		FiringStatus = EFiringStatus::AmmoOut;
+	}
+	else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
 	{
 		FiringStatus = EFiringStatus::Reloading;
 	}
@@ -103,18 +107,21 @@ void UTankAimingComponent::MoveTurretBarrelTowards(FVector AimDirection)
 
 void UTankAimingComponent::Fire()
 {
-	if (!ensure(Barrel && ProjectileBP)) { return; }
 
-	if (FiringStatus != EFiringStatus::Reloading)
+	if (FiringStatus != EFiringStatus::Reloading && TankAmmo > 0)
 	{
+		if (!ensure(Barrel && ProjectileBP)) { return; }
+
+	UE_LOG(LogTemp, Warning, TEXT("%s ammo: %d"), *GetOwner()->GetName(), TankAmmo)
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBP, 
 			Barrel->GetSocketLocation(FName("Projectile")),
 			Barrel->GetSocketRotation(FName("Projectile"))
 			);
 
-		Projectile->LaunchProjectile(LaunchSpeed);	
+		Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = FPlatformTime::Seconds();
+		TankAmmo--;
 	}
 }
 
@@ -123,4 +130,14 @@ bool UTankAimingComponent::isBarrelMoving()
 	if (!ensure(Barrel)) { return false; }
 	auto BarrelForward = Barrel->GetForwardVector();
 	return !BarrelForward.Equals(AimDirection, 0.01);
+}
+
+EFiringStatus UTankAimingComponent::GetFiringStatus() const
+{
+	return FiringStatus;
+}
+
+int UTankAimingComponent::GetTankAmmo() const
+{
+	return TankAmmo;
 }

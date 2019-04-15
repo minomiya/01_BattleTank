@@ -25,5 +25,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Hoe close the IA Tank get
-	float AcceptanceRadius = 3000;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	float AcceptanceRadius = 8000;
 };
