@@ -108,11 +108,10 @@ void UTankAimingComponent::MoveTurretBarrelTowards(FVector AimDirection)
 void UTankAimingComponent::Fire()
 {
 
-	if (FiringStatus != EFiringStatus::Reloading && TankAmmo > 0)
+	if (FiringStatus == EFiringStatus::Locked || FiringStatus == EFiringStatus::Aiming)
 	{
 		if (!ensure(Barrel && ProjectileBP)) { return; }
 
-	UE_LOG(LogTemp, Warning, TEXT("%s ammo: %d"), *GetOwner()->GetName(), TankAmmo)
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBP, 
 			Barrel->GetSocketLocation(FName("Projectile")),
