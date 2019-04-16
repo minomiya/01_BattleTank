@@ -50,7 +50,7 @@ public:
 	EFiringStatus GetFiringStatus() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
-	int GetTankAmmo() const;
+	int32 GetTankAmmo() const;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Firing")
 	EFiringStatus FiringStatus = EFiringStatus::Reloading;
@@ -64,7 +64,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTimeInSeconds = 3;
 	
-	int TankAmmo = 3;
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int32 TankAmmo = 3;
 
 	UTankBarrel* Barrel = nullptr;
 
