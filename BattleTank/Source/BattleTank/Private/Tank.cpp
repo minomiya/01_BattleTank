@@ -14,16 +14,21 @@ void ATank::BeginPlay()
 
 float ATank::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	
-	
 	int32 DamagePoints = FPlatformMath::RoundToInt(DamageAmount);
 	int32 DamageToApply = FMath::Clamp<int32>(DamageAmount, 0, CurrentHealth);
 	CurrentHealth -= DamageToApply;
 
-	UE_LOG(LogTemp, Warning, TEXT("%s currentHealth %d DamageToApply %d DamagePoints %d"), *GetName(), CurrentHealth, DamageToApply, DamagePoints)
+
+	UE_LOG(LogTemp, Warning, TEXT("%s current life %d"), *GetName(), CurrentHealth)
+
+	if (CurrentHealth == 0) 
+	{
+		TankIsDead.Broadcast();
+	}
 
 	return DamageToApply;
 }
+
 
 
 // Sets default values

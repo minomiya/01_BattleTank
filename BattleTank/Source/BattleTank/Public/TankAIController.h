@@ -24,6 +24,11 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnTankDeath();
+
 	// Hoe close the IA Tank get
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float AcceptanceRadius = 8000;

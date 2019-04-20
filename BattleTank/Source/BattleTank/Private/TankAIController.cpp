@@ -3,6 +3,8 @@
 
 #include "../Public/TankAIController.h"
 #include "TankAimmingComponent.h"
+#include "../Public/Tank.h"
+#include "Runtime/Core/Public/Delegates/DelegateSignatureImpl.inl"
 
 
 void ATankAIController::BeginPlay()
@@ -36,3 +38,20 @@ void ATankAIController::Tick(float DeltaTime)
 	}
 }
 
+void ATankAIController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return;	}
+
+		PossessedTank->TankIsDead.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
+	}
+}
+
+void ATankAIController::OnTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Game over %s is dead"), *GetName())
+}
