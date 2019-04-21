@@ -86,12 +86,12 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	}
 }
 
-void UTankAimingComponent::MoveTurretBarrelTowards(FVector AimDirection)
+void UTankAimingComponent::MoveTurretBarrelTowards(FVector TargetAimDirection)
 {
 	if (!ensure(Turret && Barrel)) { return; }
 
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
-	auto AimAsRotator = AimDirection.Rotation();
+	auto AimAsRotator = TargetAimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
 	if (FMath::Abs(DeltaRotator.Yaw) < 180) {
