@@ -54,6 +54,8 @@ void ATankAIController::SetPawn(APawn* InPawn)
 
 void ATankAIController::OnTankDeath()
 {
+	if (!PossessedTank) { return; }
+	 
 	PossessedTank->DetachFromControllerPendingDestroy();
 	UE_LOG(LogTemp, Warning, TEXT("Game over %s is dead"), *GetName())
 }
