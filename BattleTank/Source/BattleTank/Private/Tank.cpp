@@ -9,6 +9,8 @@
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
+	// initialize the value properly, if it will be changed in blueprint
+	CurrentHealth = StartHealth;
 
 }
 

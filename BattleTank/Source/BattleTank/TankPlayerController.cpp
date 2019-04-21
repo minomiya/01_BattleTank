@@ -5,6 +5,7 @@
 #include "BattleTank.h"
 #include "Runtime/Engine/Public/CollisionQueryParams.h"
 #include "TankAimmingComponent.h"
+#include "../Public/Tank.h"
 
 
 
@@ -83,6 +84,25 @@ bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& 
 	}
 
 	return false;
+}
+
+void ATankPlayerController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		PossessedTank->TankIsDead.AddUniqueDynamic(this, &ATankPlayerController::OnTankDeath);
+	}
+}
+
+void ATankPlayerController::OnTankDeath()
+{
+	StartSpectatingOnly();
+	UE_LOG(LogTemp, Warning, TEXT("Game over %s is dead"), *GetName())
 }
 
 

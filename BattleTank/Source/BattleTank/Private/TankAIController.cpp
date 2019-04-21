@@ -20,10 +20,11 @@ void ATankAIController::Tick(float DeltaTime)
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 	auto ControlledTank = GetPawn();
 
-	if (!ensure(PlayerTank && ControlledTank)) { return; }
+	if (!ensure(ControlledTank)) { return; }
 
 	auto ControlledPlayer = GetPawn();
 
+	if (!PlayerTank) { return; }
 	// Move towards the player
 	MoveToActor(PlayerTank, AcceptanceRadius);
 
@@ -44,7 +45,7 @@ void ATankAIController::SetPawn(APawn* InPawn)
 
 	if (InPawn)
 	{
-		auto PossessedTank = Cast<ATank>(InPawn);
+		PossessedTank = Cast<ATank>(InPawn);
 		if (!ensure(PossessedTank)) { return;	}
 
 		PossessedTank->TankIsDead.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
@@ -53,5 +54,6 @@ void ATankAIController::SetPawn(APawn* InPawn)
 
 void ATankAIController::OnTankDeath()
 {
+	PossessedTank->DetachFromControllerPendingDestroy();
 	UE_LOG(LogTemp, Warning, TEXT("Game over %s is dead"), *GetName())
 }

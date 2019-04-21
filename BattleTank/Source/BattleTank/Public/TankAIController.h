@@ -32,4 +32,6 @@ public:
 	// Hoe close the IA Tank get
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float AcceptanceRadius = 8000;
+
+	ATank* PossessedTank = nullptr;
 };
