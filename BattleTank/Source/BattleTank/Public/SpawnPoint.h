@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "SpawnPoint.generated.h"
 
 
