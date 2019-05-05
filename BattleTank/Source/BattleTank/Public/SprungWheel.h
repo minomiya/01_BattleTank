@@ -23,6 +23,11 @@ public:
 
 	void AddDrivingForce(float ForceMagnitude);
 
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
+	void ApplyForce();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -43,4 +48,5 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USphereComponent* Axle = nullptr;
 
+	float TotalForceMagnitudeThisFrame = 0;
 };
