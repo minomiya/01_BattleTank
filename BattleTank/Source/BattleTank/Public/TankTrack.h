@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
+#include "../Public/SpawnPoint.h"
+#include "../Public/SprungWheel.h"
 #include "TankTrack.generated.h"
 
 /**
@@ -15,26 +17,21 @@ class BATTLETANK_API UTankTrack : public UStaticMeshComponent
 	GENERATED_BODY()
 	
 private:
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, 
-		UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 public:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	void ApplySidewayForce();
 
 	UTankTrack();
 
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void SetThrottle(float Throttle);
 
-	void DriveTrack();
+	void DriveTrack(float CurrentThrottle);
 
 	// Max force per track in newtons
 	UPROPERTY(EditDefaultsOnly, Category = Input)
 	float TrackMaxDrivingForce = 40000000; // Assume 40 tonne tank, and 1g accelleration
 
-	float CurrentThrottle = 0;
+	TArray<class ASprungWheel*> GetWheels() const;
 };
